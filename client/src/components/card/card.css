@@ -1,0 +1,677 @@
+/*
+ * Gachapets card. Everything is sized in em off --cw (card width) so a card
+ * renders identically from 90px binder thumbnails to 360px reveals.
+ * Finish tiers layer on top of the base print via [data-finish].
+ */
+
+@property --drift {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 0%;
+}
+@property --spin {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+
+.card {
+  --px: 0.5;
+  --py: 0.5;
+  --rx: 0;
+  --ry: 0;
+  --hover: 0;
+  --dist: 0;
+  --paper-card: #fbf5e6;
+  --ink-card: #1b1626;
+  --rim: #15111f;
+  --rim-hi: #3a3150;
+  position: relative;
+  width: var(--cw);
+  aspect-ratio: 63 / 88;
+  font-size: calc(var(--cw) / 20);
+  perspective: calc(var(--cw) * 3.6);
+  flex: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card-tilt,
+.card-flip {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.card-tilt {
+  transform: rotateY(calc(var(--rx) * 1deg)) rotateX(calc(var(--ry) * 1deg)) translateZ(calc(var(--hover) * 0.6em));
+}
+
+.card-flip {
+  transition: transform 0.55s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.card.is-down .card-flip {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.85em;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+/* ── FRONT: printed body ─────────────────────────────────────────────── */
+.card-front {
+  background: var(--rim);
+  box-shadow:
+    0 0 0 0.12em var(--rim-hi) inset,
+    0.25em 0.35em 0 rgb(0 0 0 / 0.45),
+    0 calc(0.4em + var(--hover) * 1.2em) calc(0.8em + var(--hover) * 1.6em) rgb(0 0 0 / calc(0.3 + var(--hover) * 0.25));
+}
+
+.card-body {
+  position: absolute;
+  inset: 0.42em;
+  border-radius: 0.5em;
+  display: flex;
+  flex-direction: column;
+  padding: 0.45em 0.5em 0.4em;
+  gap: 0.32em;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(45deg, rgb(255 255 255 / 0.06) 0 0.18em, transparent 0.18em 0.5em),
+    linear-gradient(160deg, var(--el) 0%, var(--el-deep) 100%);
+  box-shadow: inset 0 0.12em 0 rgb(255 255 255 / 0.35), inset 0 -0.15em 0 rgb(0 0 0 / 0.25);
+}
+
+.card-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 0.4em;
+  background: var(--paper-card);
+  color: var(--ink-card);
+  border-radius: 0.3em;
+  padding: 0.22em 0.45em 0.18em;
+  box-shadow: 0 0.12em 0 rgb(0 0 0 / 0.35);
+}
+
+.card-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.12em;
+  line-height: 1.05;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-hp {
+  font-family: var(--font-num);
+  font-size: 1.2em;
+  line-height: 1;
+  color: #b3122c;
+  grid-row: span 2;
+  display: flex;
+  align-items: baseline;
+  gap: 0.1em;
+}
+.card-hp small {
+  font-family: var(--font-ui);
+  font-size: 0.42em;
+  color: var(--ink-card);
+}
+
+.card-gems {
+  display: flex;
+  gap: 0.25em;
+}
+.gem {
+  display: block;
+  width: 0.62em;
+  height: 0.62em;
+  background: var(--el);
+  border: 0.1em solid var(--el-ink);
+  transform: rotate(45deg);
+  box-shadow: inset 0.08em 0.08em 0 rgb(255 255 255 / 0.5);
+}
+
+/* ── Art window ─────────────────────────────────────────────────────── */
+.card-art {
+  position: relative;
+  height: 13.2em;
+  flex: none;
+  border-radius: 0.2em;
+  overflow: hidden;
+  background: #000;
+  box-shadow:
+    0 0 0 0.16em var(--ink-card),
+    0 0 0 0.3em var(--art-rim, #6b6386);
+  margin: 0.15em 0.15em 0.2em;
+  isolation: isolate;
+}
+.card[data-rarity='uncommon'] .card-art { --art-rim: #cfd6e6; }
+.card[data-rarity='rare'] .card-art { --art-rim: #f0c34a; }
+.card[data-rarity='star'] .card-art {
+  --art-rim: #ffe27a;
+  box-shadow:
+    0 0 0 0.16em var(--ink-card),
+    0 0 0 0.3em var(--art-rim),
+    0 0 0.6em 0.1em rgb(255 226 122 / 0.6);
+}
+
+.art-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  image-rendering: pixelated;
+}
+
+.art-sprite {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+  transform: translate(calc((var(--px) - 0.5) * -0.5em), calc((var(--py) - 0.5) * -0.4em + 0.55em));
+}
+.art-sprite-img {
+  filter: drop-shadow(0 0.18em 0 rgb(0 0 0 / 0.35));
+  max-width: none;
+}
+
+.card-strip {
+  font-family: var(--font-ui);
+  font-size: 0.46em;
+  letter-spacing: 0.06em;
+  color: var(--paper-card);
+  background: rgb(0 0 0 / 0.35);
+  padding: 0.35em 0.7em;
+  border-radius: 0.4em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-moves {
+  display: grid;
+  gap: 0.18em;
+  padding: 0 0.15em;
+}
+.move {
+  display: grid;
+  grid-template-columns: 3.1em 1fr auto;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.12em 0.35em;
+  background: rgb(251 245 230 / 0.94);
+  border-radius: 0.3em;
+  color: var(--ink-card);
+  box-shadow: 0 0.1em 0 rgb(0 0 0 / 0.25);
+}
+.move-cost {
+  display: flex;
+  gap: 0.12em;
+}
+.energy {
+  width: 0.62em;
+  height: 0.62em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgb(255 255 255 / 0.8) 0 18%, transparent 22%), var(--el);
+  border: 0.08em solid var(--el-ink);
+}
+.move-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.72em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.move-dmg {
+  font-family: var(--font-num);
+  font-size: 1.05em;
+  line-height: 1;
+}
+
+.card-flavor {
+  flex: 1;
+  min-height: 0;
+  font-size: 0.56em;
+  line-height: 1.22;
+  color: var(--ink-card);
+  background: rgb(251 245 230 / 0.92);
+  border-radius: 0.5em;
+  padding: 0.5em 0.65em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  box-shadow: inset 0 0.15em 0 rgb(0 0 0 / 0.12);
+}
+
+.card-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-ui);
+  font-size: 0.44em;
+  letter-spacing: 0.05em;
+  color: var(--paper-card);
+  padding: 0 0.3em;
+  min-height: 1.6em;
+}
+.card-setno {
+  opacity: 0.9;
+}
+.card-rarity {
+  font-size: 1.6em;
+  line-height: 1;
+  color: var(--paper-card);
+  text-shadow: 0 0.1em 0 rgb(0 0 0 / 0.5);
+}
+.card[data-rarity='rare'] .card-rarity { color: #ffe27a; }
+.card[data-rarity='star'] .card-rarity { color: #fff; text-shadow: 0 0 0.4em #ffd23f, 0 0.1em 0 #000; }
+
+.finish-chip {
+  margin-left: auto;
+  padding: 0.15em 0.5em;
+  border-radius: 0.3em;
+  background: var(--ink-card);
+  color: var(--chip, #fff);
+  box-shadow: inset 0 0 0 0.12em var(--chip, #fff);
+}
+.card-serial {
+  font-family: var(--font-num);
+  font-size: 1.7em;
+  line-height: 1;
+  color: var(--paper-card);
+}
+.card-foot .card-serial {
+  margin-left: auto;
+}
+.card-foot .finish-chip + .card-serial {
+  margin-left: 0;
+}
+.card-serial.is-serial {
+  color: #ffe27a;
+  text-shadow: 0 0 0.3em rgb(255 210 63 / 0.7);
+}
+
+/* ── Glare (every card) ─────────────────────────────────────────────── */
+.card-sheen,
+.card-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.card-glare {
+  background: radial-gradient(
+    farthest-corner circle at calc(var(--px) * 100%) calc(var(--py) * 100%),
+    rgb(255 255 255 / 0.55) 0%,
+    rgb(255 255 255 / 0.12) 22%,
+    transparent 55%
+  );
+  mix-blend-mode: overlay;
+  opacity: calc(var(--hover) * 0.9);
+  z-index: 6;
+}
+
+/* ═══ FINISHES ═══════════════════════════════════════════════════════ */
+
+/* Shiny: pearlescent rim + alt palette sprite + twinkles */
+.card[data-finish='shiny'] {
+  --chip: var(--f-shiny);
+}
+.card[data-finish='shiny'] .card-front {
+  background: linear-gradient(
+    calc(120deg + var(--rx) * 3deg),
+    #eef4ff 0%, #b8c6e0 22%, #ffffff 40%, #c9b8f0 58%, #f7fbff 75%, #a8b8d8 100%
+  );
+}
+.card[data-finish='shiny'] .card-sheen {
+  background: linear-gradient(
+    calc(110deg + var(--rx) * 4deg),
+    transparent 30%, rgb(255 255 255 / 0.35) 48%, transparent 62%
+  );
+  background-size: 200% 200%;
+  background-position: calc(var(--px) * 100%) 50%;
+  mix-blend-mode: soft-light;
+  opacity: calc(0.4 + var(--hover) * 0.6);
+  z-index: 5;
+}
+.art-twinkles i {
+  position: absolute;
+  z-index: 3;
+  width: 0.9em;
+  height: 0.9em;
+  background:
+    linear-gradient(#fff, #fff) center / 100% 22% no-repeat,
+    linear-gradient(#fff, #fff) center / 22% 100% no-repeat;
+  filter: drop-shadow(0 0 0.2em #fff);
+  animation: twinkle 2.4s steps(6) infinite;
+}
+.art-twinkles i:nth-child(1) { left: 16%; top: 20%; }
+.art-twinkles i:nth-child(2) { right: 18%; top: 34%; animation-delay: -0.8s; transform: scale(0.7); }
+.art-twinkles i:nth-child(3) { left: 62%; top: 12%; animation-delay: -1.6s; transform: scale(0.55); }
+@keyframes twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+  40% { opacity: 1; transform: scale(1) rotate(45deg); }
+  60% { opacity: 0.6; }
+}
+
+/* Holofoil: prismatic art window + rainbow rim */
+.card[data-finish='holo'] {
+  --chip: var(--f-holo);
+}
+.art-foil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    var(--sparkle-tex, none),
+    repeating-linear-gradient(
+      115deg,
+      #ff7ac8 0%, #ffd36a 5%, #7cffb8 10%, #6ad9ff 15%, #b28aff 20%, #ff7ac8 25%
+    );
+  background-size: 6em 6em, 400% 400%;
+  background-position:
+    center,
+    calc(var(--px) * 100% + var(--drift)) calc(var(--py) * 100% + var(--drift));
+  mix-blend-mode: color-dodge;
+  opacity: calc(0.42 + var(--hover) * 0.4);
+  filter: brightness(0.85) contrast(1.5) saturate(1.4);
+  animation: drift 9s linear infinite;
+}
+@keyframes drift {
+  to { --drift: 100%; }
+}
+.card[data-finish='holo'] .card-front {
+  background: conic-gradient(
+    from calc(var(--rx) * 6deg + var(--ry) * 6deg),
+    #ff7ac8, #ffd36a, #7cffb8, #6ad9ff, #b28aff, #ff7ac8
+  );
+}
+.card[data-finish='holo'] .card-sheen {
+  background: repeating-linear-gradient(
+    calc(135deg + var(--rx) * 2deg),
+    rgb(255 255 255 / 0) 0%, rgb(255 255 255 / 0.22) 3%, rgb(255 255 255 / 0) 6%
+  );
+  background-size: 300% 300%;
+  background-position: calc(var(--px) * 100%) calc(var(--py) * 100%);
+  mix-blend-mode: overlay;
+  opacity: calc(0.25 + var(--hover) * 0.6);
+  z-index: 5;
+}
+
+/* Parallax: separated depth layers + lenticular ridges */
+.card[data-finish='parallax'] {
+  --chip: var(--f-parallax);
+}
+.card[data-finish='parallax'] .card-front {
+  background: linear-gradient(160deg, #2a1d63, #6b4dff 45%, #1a1240);
+  box-shadow:
+    0 0 0 0.12em #a184ff inset,
+    0.25em 0.35em 0 rgb(0 0 0 / 0.45),
+    0 0 calc(0.6em + var(--hover) * 1.2em) rgb(161 132 255 / 0.6);
+}
+.card[data-finish='parallax'] .art-layer {
+  inset: -9%;
+  will-change: transform;
+}
+.card[data-finish='parallax'] .layer-sky { transform: translate(calc((var(--px) - 0.5) * 0.4em), calc((var(--py) - 0.5) * 0.3em)); }
+.card[data-finish='parallax'] .layer-far { transform: translate(calc((var(--px) - 0.5) * -0.9em), calc((var(--py) - 0.5) * -0.6em)); }
+.card[data-finish='parallax'] .layer-mid { transform: translate(calc((var(--px) - 0.5) * -1.8em), calc((var(--py) - 0.5) * -1.1em)); }
+.card[data-finish='parallax'] .layer-near { transform: translate(calc((var(--px) - 0.5) * -3.2em), calc((var(--py) - 0.5) * -1.8em)); z-index: 3; }
+.card[data-finish='parallax'] .art-sprite {
+  transform: translate(calc((var(--px) - 0.5) * -2.4em), calc((var(--py) - 0.5) * -1.4em + 0.55em)) scale(1.04);
+}
+.art-lenticular {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: repeating-linear-gradient(90deg, rgb(255 255 255 / 0.07) 0 0.12em, transparent 0.12em 0.36em);
+  mix-blend-mode: overlay;
+  opacity: calc(0.5 + var(--hover) * 0.5);
+}
+.card[data-finish='parallax'] .card-sheen {
+  background: linear-gradient(
+    calc(100deg + var(--rx) * 3deg),
+    transparent 35%, rgb(161 132 255 / 0.4) 50%, transparent 65%
+  );
+  background-size: 250% 250%;
+  background-position: calc(var(--px) * 100%) calc(var(--py) * 100%);
+  mix-blend-mode: color-dodge;
+  opacity: calc(0.3 + var(--hover) * 0.5);
+  z-index: 5;
+}
+
+/* 3D Pop: voxel-extruded sprite that breaks the frame */
+.card[data-finish='pop3d'] {
+  --chip: var(--f-pop3d);
+}
+.card[data-finish='pop3d'] .card-front {
+  background: linear-gradient(
+    calc(135deg + var(--rx) * 4deg),
+    #fff3b0 0%, #c98a00 18%, #ffe27a 36%, #8a5a00 55%, #ffd23f 72%, #fff8d6 100%
+  );
+}
+.voxel {
+  position: absolute;
+  left: 50%;
+  top: 0.95em;
+  width: var(--sp);
+  height: var(--sp);
+  margin-left: calc(var(--sp) / -2);
+  transform-style: preserve-3d;
+  transform: translateZ(2.2em) translate(calc((var(--px) - 0.5) * -1em), calc((var(--py) - 0.5) * -0.6em)) scale(1.12);
+  pointer-events: none;
+  z-index: 4;
+}
+.voxel-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  transform: translateZ(calc(var(--i) * -0.16em));
+  filter: brightness(calc(1 - var(--i) * 0.075)) saturate(calc(1 - var(--i) * 0.04));
+}
+.voxel-layer:first-child {
+  filter: drop-shadow(0 0 0.15em rgb(255 255 255 / 0.4));
+}
+.card[data-finish='pop3d'] .card-sheen {
+  background:
+    radial-gradient(circle at calc(var(--px) * 100%) calc(var(--py) * 100%), rgb(255 240 180 / 0.55), transparent 45%),
+    repeating-conic-gradient(from calc(var(--rx) * 8deg) at 50% 30%, rgb(255 210 63 / 0.18) 0 6deg, transparent 6deg 18deg);
+  mix-blend-mode: overlay;
+  opacity: calc(0.35 + var(--hover) * 0.6);
+  z-index: 5;
+}
+
+/* Living Foil: animated cosmic rim + animated creature */
+.card[data-finish='living'] {
+  --chip: var(--f-living);
+}
+.card[data-finish='living'] .card-front {
+  background: conic-gradient(from var(--spin), #ff6bd5, #ffd23f, #7cff9a, #5ef2ff, #a184ff, #ff6bd5);
+  animation: living-spin 4s linear infinite;
+  box-shadow:
+    0.25em 0.35em 0 rgb(0 0 0 / 0.45),
+    0 0 calc(0.8em + var(--hover) * 1em) rgb(255 107 213 / 0.55);
+}
+@keyframes living-spin {
+  to { --spin: 360deg; }
+}
+.card[data-finish='living'] .art-foil {
+  background-image:
+    var(--sparkle-tex, none),
+    conic-gradient(from var(--spin) at 50% 120%, #ff6bd5, #5ef2ff, #ffd23f, #a184ff, #ff6bd5);
+  background-size: 6em 6em, 100% 100%;
+  mix-blend-mode: color-dodge;
+  opacity: 0.5;
+  animation: living-spin 6s linear infinite;
+}
+.card[data-finish='living'] .card-sheen {
+  background: linear-gradient(
+    calc(var(--spin) + 90deg),
+    transparent 30%, rgb(255 255 255 / 0.28) 50%, transparent 70%
+  );
+  mix-blend-mode: overlay;
+  animation: living-spin 3s linear infinite;
+  z-index: 5;
+}
+
+/* Factory Misprint: wrong inks, off-register art, typo'd name */
+.card[data-finish='misprint'] {
+  --chip: var(--f-misprint);
+}
+.card[data-finish='misprint'] .card-body {
+  filter: hue-rotate(155deg) saturate(1.3);
+}
+.card[data-finish='misprint'] .card-front {
+  background: repeating-linear-gradient(0deg, #ff2a2a 0 0.2em, #1a0000 0.2em 0.4em);
+}
+.card[data-finish='misprint'] .card-art {
+  transform: translate(0.55em, 0.35em) rotate(-1.2deg);
+}
+.card[data-finish='misprint'] .art-sprite-img {
+  filter:
+    drop-shadow(0.22em 0 0 rgb(255 0 70 / 0.75))
+    drop-shadow(-0.22em 0.05em 0 rgb(0 255 220 / 0.65));
+}
+.card[data-finish='misprint'] .card-name {
+  transform: translate(0.25em, -0.05em) rotate(-1.5deg);
+  text-shadow: 0.08em 0 0 rgb(255 0 70 / 0.6), -0.08em 0 0 rgb(0 200 255 / 0.6);
+}
+.card[data-finish='misprint'] .card-flavor {
+  text-shadow: 0.25em 0.1em 0 rgb(0 0 0 / 0.18);
+}
+.card[data-finish='misprint'] .art-foil {
+  background-image:
+    repeating-linear-gradient(0deg, rgb(255 42 42 / 0.4) 0 0.15em, transparent 0.15em 0.5em),
+    repeating-linear-gradient(115deg, #2affd5 0%, #ff2a2a 8%, #fff 12%, #2affd5 20%);
+  background-size: 100% 100%, 300% 300%;
+  mix-blend-mode: difference;
+  opacity: 0.35;
+}
+.card[data-finish='misprint'] .card-sheen {
+  background: linear-gradient(transparent 0 40%, rgb(42 255 213 / 0.3) 40% 43%, transparent 43% 70%, rgb(255 42 42 / 0.3) 70% 72%, transparent 72%);
+  mix-blend-mode: screen;
+  animation: glitch-slide 2.6s steps(1) infinite;
+  z-index: 5;
+}
+@keyframes glitch-slide {
+  0% { transform: translateY(0); opacity: 0.8; }
+  12% { transform: translateY(-18%); opacity: 0.4; }
+  14% { transform: translateY(22%) translateX(2%); opacity: 1; }
+  30% { transform: translateY(5%); opacity: 0.5; }
+  55% { transform: translateY(-30%) translateX(-1%); opacity: 0.9; }
+  57% { transform: translateY(0); opacity: 0.2; }
+  80% { transform: translateY(12%); opacity: 0.7; }
+}
+.qc-stamp {
+  position: absolute;
+  right: 0.6em;
+  top: 9.2em;
+  z-index: 5;
+  font-family: var(--font-ui);
+  font-size: 0.8em;
+  letter-spacing: 0.1em;
+  color: #ff2a2a;
+  border: 0.18em solid #ff2a2a;
+  padding: 0.2em 0.45em;
+  transform: rotate(-14deg);
+  opacity: 0.85;
+  mix-blend-mode: multiply;
+  background: rgb(255 255 255 / 0.25);
+}
+
+/* ── BACK ───────────────────────────────────────────────────────────── */
+.card-back {
+  overflow: hidden;
+  background: #1b1240;
+  box-shadow:
+    0 0 0 0.42em #120c2c inset,
+    0 0 0 0.56em #ff4f8b inset,
+    0.25em 0.35em 0 rgb(0 0 0 / 0.45);
+}
+.back-pattern {
+  position: absolute;
+  inset: 0.56em;
+  border-radius: 0.4em;
+  background:
+    radial-gradient(circle at 50% 50%, rgb(255 79 139 / 0.35), transparent 60%),
+    repeating-linear-gradient(45deg, rgb(255 255 255 / 0.06) 0 0.5em, transparent 0.5em 1em),
+    repeating-linear-gradient(-45deg, rgb(60 242 196 / 0.08) 0 0.5em, transparent 0.5em 1em),
+    linear-gradient(180deg, #2b1a66, #120c2c);
+}
+.back-emblem {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  color: #120c2c;
+  --ic-2: #ff4f8b;
+  --ic-3: #ffd0e1;
+  filter: drop-shadow(0 0.2em 0 rgb(0 0 0 / 0.5));
+}
+.back-emblem svg {
+  color: #f4efff;
+}
+.back-word {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5em;
+  letter-spacing: 0.08em;
+  color: #f4efff;
+  text-shadow: 0.08em 0.08em 0 #ff4f8b;
+}
+.back-tell {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+}
+.card-back[data-tell] .back-tell {
+  opacity: 1;
+  animation: tell-pulse 1.1s ease-in-out infinite;
+}
+.card-back[data-tell='holo'] .back-tell { box-shadow: inset 0 0 1.4em 0.2em var(--f-holo); }
+.card-back[data-tell='parallax'] .back-tell { box-shadow: inset 0 0 1.8em 0.35em var(--f-parallax); }
+.card-back[data-tell='pop3d'] .back-tell { box-shadow: inset 0 0 2.2em 0.5em var(--f-pop3d); }
+.card-back[data-tell='living'] .back-tell {
+  box-shadow: inset 0 0 2.4em 0.6em #fff;
+  background: conic-gradient(from var(--spin), rgb(255 107 213 / 0.35), rgb(94 242 255 / 0.35), rgb(255 210 63 / 0.35), rgb(255 107 213 / 0.35));
+  animation: tell-pulse 0.7s ease-in-out infinite, living-spin 2s linear infinite;
+}
+.card-back[data-tell='misprint'] .back-tell {
+  box-shadow: inset 0 0 2em 0.5em var(--f-misprint);
+  background: repeating-linear-gradient(0deg, rgb(255 42 42 / 0.15) 0 2px, transparent 2px 5px);
+  animation: tell-pulse 0.25s steps(2) infinite;
+}
+@keyframes tell-pulse {
+  50% { opacity: 0.55; }
+}
+
+/* Interactive cards lift a touch more on hover */
+.card.is-interactive {
+  cursor: var(--cursor-hand);
+}

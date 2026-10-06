@@ -1,0 +1,239 @@
+.pack {
+  --px: 0.5;
+  --py: 0.5;
+  --rx: 0;
+  --ry: 0;
+  --hover: 0;
+  --pw: 260px;
+  --ph: calc(var(--pw) / 0.64);
+  position: relative;
+  width: var(--pw);
+  aspect-ratio: 0.64;
+  font-size: calc(var(--pw) / 20);
+  perspective: calc(var(--pw) * 4);
+  flex: none;
+  user-select: none;
+  filter: drop-shadow(0.4em 0.5em 0 rgb(0 0 0 / 0.5));
+}
+.pack-tilt {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(calc(var(--rx) * 1deg)) rotateX(calc(var(--ry) * 1deg)) translateZ(calc(var(--hover) * 1em));
+  transform-style: preserve-3d;
+}
+.pack-body {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.pack-inner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--pw);
+  height: var(--ph);
+}
+
+/* Strip/body split for the rip: each part clips its slice of the full wrapper. */
+.pack--strip .pack-body {
+  bottom: auto;
+  height: calc(var(--ph) * var(--tear-bot));
+}
+.pack--body .pack-body {
+  top: calc(var(--ph) * var(--tear-top));
+}
+.pack--body .pack-inner {
+  top: calc(var(--ph) * var(--tear-top) * -1);
+}
+
+.pack-bg,
+.pack-foil,
+.pack-glare {
+  position: absolute;
+  inset: 0;
+}
+.pack-bg {
+  background:
+    radial-gradient(70% 45% at 50% 48%, hsl(var(--hA) 95% 70% / 0.55), transparent 70%),
+    repeating-linear-gradient(115deg, rgb(255 255 255 / 0.07) 0 0.6em, transparent 0.6em 1.4em),
+    linear-gradient(170deg, hsl(var(--hA) 85% 52%), hsl(calc((var(--hA) + var(--hB)) / 2) 70% 34%) 55%, hsl(var(--hB) 80% 22%));
+}
+.pack-foil {
+  background-image:
+    var(--sparkle-tex, none),
+    linear-gradient(
+      calc(110deg + var(--rx) * 3deg),
+      transparent 20%, rgb(255 255 255 / 0.35) 38%, hsl(var(--hB) 100% 75% / 0.4) 46%, transparent 62%
+    );
+  background-size: 5em 5em, 260% 260%;
+  background-position: center, calc(var(--px) * 100%) calc(var(--py) * 100%);
+  mix-blend-mode: color-dodge;
+  opacity: calc(0.45 + var(--hover) * 0.45);
+  pointer-events: none;
+}
+.pack-glare {
+  background: radial-gradient(farthest-corner circle at calc(var(--px) * 100%) calc(var(--py) * 100%), rgb(255 255 255 / 0.45), transparent 50%);
+  mix-blend-mode: overlay;
+  opacity: var(--hover);
+  pointer-events: none;
+}
+
+.pack-crimp {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.35) 0 0.18em, rgb(0 0 0 / 0.2) 0.18em 0.45em),
+    linear-gradient(180deg, #e8e4f5, #9a93b8);
+}
+.pack-crimp--top {
+  top: 0;
+  height: calc(var(--tear-bot) * 100%);
+}
+.pack-crimp--bottom {
+  bottom: 0;
+  height: 6%;
+}
+.pack-tearline {
+  position: absolute;
+  top: calc(var(--tear-bot) * 100% + 0.1em);
+  left: 0;
+  right: 0;
+  border-top: 0.16em dashed rgb(255 255 255 / 0.7);
+  font-family: var(--font-ui);
+  font-size: 0.55em;
+  letter-spacing: 0.1em;
+  color: rgb(255 255 255 / 0.85);
+  padding-left: 0.8em;
+  padding-top: 0.15em;
+}
+
+.pack-logo {
+  position: absolute;
+  top: 17%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2.1em;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-shadow: 0.08em 0.08em 0 #1a0b2e, 0.14em 0.14em 0 rgb(0 0 0 / 0.35);
+}
+.pack-logo b {
+  color: #ffe27a;
+}
+
+.pack-art {
+  position: absolute;
+  top: 27%;
+  left: 0;
+  right: 0;
+  height: 44%;
+}
+.pack-burst {
+  position: absolute;
+  inset: 4% 12%;
+  background: repeating-conic-gradient(from calc(var(--rx) * 4deg), rgb(255 255 255 / 0.22) 0 8deg, transparent 8deg 22deg);
+  mask-image: radial-gradient(circle, #000 25%, transparent 70%);
+  animation: burst-spin 18s linear infinite;
+}
+@keyframes burst-spin {
+  to { rotate: 360deg; }
+}
+.pack-mascot {
+  position: absolute;
+  max-width: none;
+  filter: drop-shadow(0.15em 0.2em 0 rgb(0 0 0 / 0.45));
+}
+.pack-mascot--c {
+  width: 12.8em;
+  left: 50%;
+  bottom: -4%;
+  translate: -50% 0;
+  transform: translate(calc((var(--px) - 0.5) * -1em), calc((var(--py) - 0.5) * -0.6em));
+}
+.pack-mascot--l,
+.pack-mascot--r {
+  width: 7.6em;
+  bottom: 18%;
+  filter: brightness(0.55) saturate(0.8) drop-shadow(0.1em 0.15em 0 rgb(0 0 0 / 0.4));
+  transform: translate(calc((var(--px) - 0.5) * -0.4em), 0);
+}
+.pack-mascot--l { left: -2%; }
+.pack-mascot--r { right: -2%; }
+
+.pack-ribbon {
+  position: absolute;
+  top: 72%;
+  left: -2%;
+  right: -2%;
+  padding: 0.45em 0;
+  text-align: center;
+  background: #1a0b2e;
+  box-shadow: 0 0.18em 0 rgb(0 0 0 / 0.4), inset 0 0.14em 0 hsl(var(--hA) 90% 65%), inset 0 -0.14em 0 hsl(var(--hB) 90% 55%);
+}
+.pack-set {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15em;
+  color: #fff;
+  letter-spacing: 0.03em;
+}
+.pack-meta {
+  position: absolute;
+  top: 81%;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1.1em;
+  font-family: var(--font-ui);
+  font-size: 0.56em;
+  letter-spacing: 0.08em;
+  color: rgb(255 255 255 / 0.9);
+  text-shadow: 0.1em 0.1em 0 rgb(0 0 0 / 0.5);
+}
+.pack-count {
+  background: #ffe27a;
+  color: #2a1a00;
+  padding: 0.2em 0.5em;
+  text-shadow: none;
+}
+.pack-barcode {
+  position: absolute;
+  bottom: 8.5%;
+  right: 1.1em;
+  width: 4.4em;
+  height: 1.3em;
+  background:
+    repeating-linear-gradient(90deg, #fff 0 0.12em, transparent 0.12em 0.22em, #fff 0.22em 0.28em, transparent 0.28em 0.46em),
+    rgb(0 0 0 / 0.5);
+  opacity: 0.8;
+}
+
+.pack.is-locked .pack-mascot {
+  filter: brightness(0) drop-shadow(0 0 0.3em rgb(255 255 255 / 0.3));
+}
+.pack.is-locked .pack-bg {
+  filter: grayscale(0.85) brightness(0.55);
+}
+.pack-lock {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: repeating-linear-gradient(45deg, rgb(0 0 0 / 0.35) 0 0.5em, transparent 0.5em 1em);
+}
+.pack-lock span {
+  font-family: var(--font-ui);
+  font-size: 0.8em;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: #07060f;
+  padding: 0.5em 0.8em;
+  border: 0.15em solid #fff;
+  transform: rotate(-8deg);
+}

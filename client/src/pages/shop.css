@@ -1,0 +1,141 @@
+.muted {
+  color: var(--muted);
+}
+.small {
+  font-size: 14px;
+}
+.sheet-title {
+  font-size: 30px;
+  margin-bottom: 10px;
+  text-shadow: 3px 3px 0 var(--ink-950);
+}
+
+.set-shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 540px), 1fr));
+  gap: 28px;
+  margin-bottom: 32px;
+}
+
+.set-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 26px;
+  align-items: center;
+  padding: 26px;
+  background:
+    radial-gradient(60% 80% at 20% 50%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%),
+    var(--ink-800);
+  border: 3px solid var(--ink-950);
+  border-radius: 12px;
+  corner-shape: notch;
+  box-shadow: inset 0 0 0 2px var(--ink-600), 6px 6px 0 var(--ink-950);
+}
+.set-card-pack {
+  display: grid;
+  place-items: center;
+}
+.set-card-info {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+.set-card-info h2 {
+  font-size: 34px;
+  text-shadow: 3px 3px 0 var(--ink-950);
+}
+.set-card-info .kicker {
+  color: var(--accent);
+}
+.set-card-buy {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.stock {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  background: var(--ink-950);
+  box-shadow: inset 0 0 0 2px var(--ink-700);
+}
+.stock-row {
+  display: grid;
+  grid-template-columns: 96px 1fr 104px;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+}
+.stock-row:first-child {
+  grid-template-columns: 1fr auto;
+}
+.stock-count {
+  text-align: right;
+  white-space: nowrap;
+}
+.stock-row small {
+  font-size: 13px;
+  color: var(--faint);
+}
+.stock-bar {
+  height: 8px;
+  background: var(--ink-800);
+  overflow: hidden;
+}
+.stock-bar i {
+  display: block;
+  height: 100%;
+  background: var(--f-pop3d);
+}
+.stock-bar i[data-f='living'] { background: linear-gradient(90deg, var(--f-living), var(--f-holo)); }
+.stock-bar i[data-f='misprint'] { background: var(--f-misprint); }
+
+.coming-row {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  padding: 6px 4px 16px;
+}
+.coming-item {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+.odds {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+}
+.odds th {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--muted);
+  padding: 6px 8px;
+  border-bottom: 2px solid var(--ink-600);
+}
+.odds td {
+  padding: 8px;
+  font-size: 20px;
+  border-bottom: 2px dashed var(--ink-700);
+}
+
+@media (max-width: 640px) {
+  .set-card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+  .set-card-buy {
+    justify-content: center;
+  }
+  .stock-row {
+    grid-template-columns: 96px 1fr auto;
+    text-align: left;
+  }
+}

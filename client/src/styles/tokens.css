@@ -1,0 +1,88 @@
+/*
+ * Gachapets design tokens.
+ * Aesthetic: a midnight capsule-toy arcade — ink-black panels, neon capsule
+ * pink, phosphor mint, coin gold. Hard offset shadows instead of blur so
+ * everything reads as a physical, printed object.
+ */
+:root {
+  color-scheme: dark;
+
+  /* ink */
+  --ink-950: #07060f;
+  --ink-900: #0d0b1a;
+  --ink-850: #120f22;
+  --ink-800: #17132b;
+  --ink-700: #1f1a3a;
+  --ink-600: #2b2450;
+  --ink-500: #3d3470;
+  --ink-400: #5a4f99;
+  --paper: #f4efff;
+  --paper-dim: #cfc6ee;
+  --muted: #9a90c2;
+  --faint: #6c6396;
+
+  /* accents (overridable per player theme) */
+  --accent: #ff4f8b;
+  --accent-2: #3cf2c4;
+  --accent-ink: #2a0716;
+  --gold: #ffd23f;
+  --gold-deep: #c98a00;
+  --violet: #8a6bff;
+  --sky: #4fc3ff;
+  --danger: #ff4747;
+  --ok: #4dff9a;
+
+  /* finish signature colors */
+  --f-base: #b9b3d6;
+  --f-shiny: #dfe9ff;
+  --f-holo: #5ef2ff;
+  --f-parallax: #a184ff;
+  --f-pop3d: #ffd23f;
+  --f-living: #ff6bd5;
+  --f-misprint: #ff2a2a;
+
+  --shadow: 4px 4px 0 var(--ink-950);
+  --shadow-sm: 2px 2px 0 var(--ink-950);
+  --shadow-lg: 6px 6px 0 var(--ink-950);
+  --bevel: inset 0 2px 0 rgb(255 255 255 / 0.12), inset 0 -3px 0 rgb(0 0 0 / 0.35);
+
+  --font-display: 'Pixelify Sans', system-ui, sans-serif;
+  --font-ui: 'Silkscreen', 'Pixelify Sans', monospace;
+  --font-num: 'VT323', ui-monospace, monospace;
+  --font-body: 'Pixelify Sans', system-ui, sans-serif;
+
+  --radius: 6px;
+  --dock-h: 76px;
+  --hud-h: 64px;
+
+  /* pixel cursors */
+  --cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='28' viewBox='0 0 12 14' shape-rendering='crispEdges'%3E%3Crect x='0' y='0' width='1' height='1' fill='%2307060f'/%3E%3Crect x='0' y='1' width='2' height='1' fill='%2307060f'/%3E%3Crect x='0' y='2' width='1' height='1' fill='%2307060f'/%3E%3Crect x='1' y='2' width='1' height='1' fill='%23ff4f8b'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%2307060f'/%3E%3Crect x='0' y='3' width='1' height='1' fill='%2307060f'/%3E%3Crect x='1' y='3' width='2' height='1' fill='%23f4efff'/%3E%3Crect x='3' y='3' width='1' height='1' fill='%2307060f'/%3E%3Crect x='0' y='4' width='1' height='1' fill='%2307060f'/%3E%3Crect x='1' y='4' width='3' height='1' fill='%23f4efff'/%3E%3Crect x='4' y='4' width='1' height='1' fill='%2307060f'/%3E%3Crect x='0' y='5' width='1' height='1' fill='%2307060f'/%3E%3Crect x='1' y='5' width='4' height='1' fill='%23f4efff'/%3E%3Crect x='5' y='5' width='1' height='1' fill='%2307060f'/%3E%3Crect x='0' y='6' width='1' height='1' fill='%2307060f'/%3E%3Crect x='1' y='6' width='5' height='1' fill='%23f4efff'/%3E%3Crect x='6' y='6' width='1' height='1' fill='%2307060f'/%3E%3Crect x='0' y='7' width='1' height='1' fill='%2307060f'/%3E%3Crect x='1' y='7' width='6' height='1' fill='%23f4efff'/%3E%3Crect x='7' y='7' width='1' height='1' fill='%2307060f'/%3E%3Crect x='0' y='8' width='1' height='1' fill='%2307060f'/%3E%3Crect x='1' y='8' width='7' height='1' fill='%23f4efff'/%3E%3Crect x='8' y='8' width='1' height='1' fill='%2307060f'/%3E%3Crect x='0' y='9' width='1' height='1' fill='%2307060f'/%3E%3Crect x='1' y='9' width='4' height='1' fill='%23f4efff'/%3E%3Crect x='5' y='9' width='5' height='1' fill='%2307060f'/%3E%3Crect x='0' y='10' width='1' height='1' fill='%2307060f'/%3E%3Crect x='1' y='10' width='1' height='1' fill='%23f4efff'/%3E%3Crect x='2' y='10' width='2' height='1' fill='%2307060f'/%3E%3Crect x='4' y='10' width='2' height='1' fill='%23f4efff'/%3E%3Crect x='6' y='10' width='1' height='1' fill='%2307060f'/%3E%3Crect x='0' y='11' width='2' height='1' fill='%2307060f'/%3E%3Crect x='4' y='11' width='1' height='1' fill='%2307060f'/%3E%3Crect x='5' y='11' width='2' height='1' fill='%23f4efff'/%3E%3Crect x='7' y='11' width='1' height='1' fill='%2307060f'/%3E%3Crect x='0' y='12' width='1' height='1' fill='%2307060f'/%3E%3Crect x='5' y='12' width='1' height='1' fill='%2307060f'/%3E%3Crect x='6' y='12' width='2' height='1' fill='%23f4efff'/%3E%3Crect x='8' y='12' width='1' height='1' fill='%2307060f'/%3E%3Crect x='5' y='13' width='4' height='1' fill='%2307060f'/%3E%3C/svg%3E") 1 1, auto;
+  --cursor-hand: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='26' viewBox='0 0 12 13' shape-rendering='crispEdges'%3E%3Crect x='4' y='0' width='2' height='1' fill='%2307060f'/%3E%3Crect x='3' y='1' width='1' height='1' fill='%2307060f'/%3E%3Crect x='4' y='1' width='2' height='1' fill='%23ff4f8b'/%3E%3Crect x='6' y='1' width='1' height='1' fill='%2307060f'/%3E%3Crect x='3' y='2' width='1' height='1' fill='%2307060f'/%3E%3Crect x='4' y='2' width='2' height='1' fill='%23f4efff'/%3E%3Crect x='6' y='2' width='1' height='1' fill='%2307060f'/%3E%3Crect x='3' y='3' width='1' height='1' fill='%2307060f'/%3E%3Crect x='4' y='3' width='2' height='1' fill='%23f4efff'/%3E%3Crect x='6' y='3' width='3' height='1' fill='%2307060f'/%3E%3Crect x='3' y='4' width='1' height='1' fill='%2307060f'/%3E%3Crect x='4' y='4' width='2' height='1' fill='%23f4efff'/%3E%3Crect x='6' y='4' width='1' height='1' fill='%2307060f'/%3E%3Crect x='7' y='4' width='2' height='1' fill='%23f4efff'/%3E%3Crect x='9' y='4' width='2' height='1' fill='%2307060f'/%3E%3Crect x='1' y='5' width='3' height='1' fill='%2307060f'/%3E%3Crect x='4' y='5' width='2' height='1' fill='%23f4efff'/%3E%3Crect x='6' y='5' width='1' height='1' fill='%2307060f'/%3E%3Crect x='7' y='5' width='2' height='1' fill='%23f4efff'/%3E%3Crect x='9' y='5' width='1' height='1' fill='%2307060f'/%3E%3Crect x='10' y='5' width='1' height='1' fill='%23f4efff'/%3E%3Crect x='11' y='5' width='1' height='1' fill='%2307060f'/%3E%3Crect x='0' y='6' width='1' height='1' fill='%2307060f'/%3E%3Crect x='1' y='6' width='2' height='1' fill='%23f4efff'/%3E%3Crect x='3' y='6' width='1' height='1' fill='%2307060f'/%3E%3Crect x='4' y='6' width='7' height='1' fill='%23f4efff'/%3E%3Crect x='11' y='6' width='1' height='1' fill='%2307060f'/%3E%3Crect x='0' y='7' width='1' height='1' fill='%2307060f'/%3E%3Crect x='1' y='7' width='10' height='1' fill='%23f4efff'/%3E%3Crect x='11' y='7' width='1' height='1' fill='%2307060f'/%3E%3Crect x='1' y='8' width='1' height='1' fill='%2307060f'/%3E%3Crect x='2' y='8' width='9' height='1' fill='%23f4efff'/%3E%3Crect x='11' y='8' width='1' height='1' fill='%2307060f'/%3E%3Crect x='2' y='9' width='1' height='1' fill='%2307060f'/%3E%3Crect x='3' y='9' width='7' height='1' fill='%23f4efff'/%3E%3Crect x='10' y='9' width='1' height='1' fill='%2307060f'/%3E%3Crect x='2' y='10' width='1' height='1' fill='%2307060f'/%3E%3Crect x='3' y='10' width='7' height='1' fill='%23f4efff'/%3E%3Crect x='10' y='10' width='1' height='1' fill='%2307060f'/%3E%3Crect x='3' y='11' width='1' height='1' fill='%2307060f'/%3E%3Crect x='4' y='11' width='5' height='1' fill='%23f4efff'/%3E%3Crect x='9' y='11' width='1' height='1' fill='%2307060f'/%3E%3Crect x='3' y='12' width='7' height='1' fill='%2307060f'/%3E%3C/svg%3E") 9 1, pointer;
+}
+
+@media (max-width: 720px) {
+  :root {
+    --dock-h: 68px;
+    --hud-h: 56px;
+  }
+}
+
+/* Element palette — card frames, scene skies and type gems. */
+[data-el='normal'] { --el: #c8bf93; --el-deep: #7a7350; --el-ink: #2a2614; }
+[data-el='fire'] { --el: #ff6b3d; --el-deep: #b2321a; --el-ink: #3a0d04; }
+[data-el='water'] { --el: #4f8bff; --el-deep: #2147b3; --el-ink: #071433; }
+[data-el='grass'] { --el: #5fd068; --el-deep: #25803a; --el-ink: #062612; }
+[data-el='electric'] { --el: #ffd23f; --el-deep: #c08a00; --el-ink: #332400; }
+[data-el='ice'] { --el: #8fe3ff; --el-deep: #3b9cc4; --el-ink: #062433; }
+[data-el='fighting'] { --el: #e0593f; --el-deep: #8f2a1a; --el-ink: #2e0a04; }
+[data-el='poison'] { --el: #be63e6; --el-deep: #6c2a8f; --el-ink: #230933; }
+[data-el='ground'] { --el: #deaa62; --el-deep: #8f6224; --el-ink: #2e1d06; }
+[data-el='flying'] { --el: #a3b8ff; --el-deep: #5168c4; --el-ink: #0e1640; }
+[data-el='psychic'] { --el: #ff63a8; --el-deep: #b3245f; --el-ink: #33061a; }
+[data-el='bug'] { --el: #b2d23f; --el-deep: #6b8a10; --el-ink: #1f2903; }
+[data-el='rock'] { --el: #c4a66a; --el-deep: #7a6130; --el-ink: #261c08; }
+[data-el='ghost'] { --el: #8c70e0; --el-deep: #4b3496; --el-ink: #130a2e; }
+[data-el='dragon'] { --el: #7357ff; --el-deep: #3a22b8; --el-ink: #0e0638; }
+[data-el='dark'] { --el: #8a7468; --el-deep: #4a3a33; --el-ink: #160f0c; }
+[data-el='steel'] { --el: #a8bccf; --el-deep: #5b7085; --el-ink: #121c26; }
+[data-el='fairy'] { --el: #ffa3da; --el-deep: #c45a98; --el-ink: #330b22; }

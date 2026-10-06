@@ -1,0 +1,19 @@
+.finish-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 34px 22px;
+  justify-items: center;
+}
+.finish-cell {
+  margin: 0;
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+.finish-cell figcaption {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  text-align: center;
+  max-width: 240px;
+}

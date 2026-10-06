@@ -100,6 +100,8 @@ export function evaluateBadges(ctx: Ctx, userId: number, trigger: BadgeTrigger):
   for (const id of earned) {
     const def = defs.get(id)!;
     ctx.db.prepare('INSERT INTO user_badges (user_id, badge_id, earned_at) VALUES (?, ?, ?)').run(userId, id, t);
+    // First title a player ever unlocks is equipped for them; later ones they choose.
+    if (def.title) ctx.db.prepare('UPDATE users SET title = ? WHERE id = ? AND title IS NULL').run(def.title, userId);
     if (def.reward > 0) adjustCoins(ctx, userId, def.reward, 'badge', id);
     if (def.tier === 'gold' || def.tier === 'prism') pushFeed(ctx, 'badge', userId, { badge: id });
   }
