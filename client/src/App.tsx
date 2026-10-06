@@ -1,9 +1,10 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { Route, Switch, useLocation } from 'wouter';
+import { Route, Router, Switch, useLocation } from 'wouter';
+import { useHashLocation } from 'wouter/use-hash-location';
 import { AnimatePresence, motion } from 'motion/react';
 import { cosmeticById } from '@gachapets/shared';
 import { useCatalogQuery, useMe } from './lib/queries.ts';
-import { api } from './lib/api.ts';
+import { api, DEMO } from './lib/api.ts';
 import { connectSocket, setSpeciesNamer } from './lib/socket.ts';
 import { useLive } from './lib/store.ts';
 import { Backdrop, Dock, FxLayer, Hud, Toasts } from './components/layout.tsx';
@@ -43,7 +44,18 @@ function useThemeAccent(themeId: string | undefined) {
   }, [themeId]);
 }
 
+/** The demo artifact routes with #/paths (it can't own the page URL). */
 export function App() {
+  return DEMO ? (
+    <Router hook={useHashLocation}>
+      <Game />
+    </Router>
+  ) : (
+    <Game />
+  );
+}
+
+function Game() {
   const catalog = useCatalogQuery();
   const me = useMe();
   const [location] = useLocation();

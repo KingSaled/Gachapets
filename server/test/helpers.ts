@@ -1,5 +1,5 @@
 import { openDb } from '../src/db/index.ts';
-import { loadCatalog } from '../src/catalog.ts';
+import { loadCatalog } from '../src/catalog-load.ts';
 import { loadConfig } from '../src/config.ts';
 import { Bus, type Ctx } from '../src/context.ts';
 import { mulberry32 } from '@gachapets/shared';

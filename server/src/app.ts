@@ -8,7 +8,7 @@ import websocket from '@fastify/websocket';
 import { ZodError } from 'zod';
 import { loadConfig, type Config } from './config.ts';
 import { openDb, type DB } from './db/index.ts';
-import { loadCatalog } from './catalog.ts';
+import { loadCatalog } from './catalog-load.ts';
 import { Bus, type Ctx, GameError, cryptoRng } from './context.ts';
 import { registerRoutes } from './routes.ts';
 import { registerSprites } from './sprites.ts';

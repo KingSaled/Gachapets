@@ -1,4 +1,3 @@
-import fs from 'node:fs';
 import type { CardSet, Catalog, Rarity, Species } from '@gachapets/shared';
 
 export interface CatalogIndex {
@@ -13,8 +12,7 @@ export interface CatalogIndex {
   lines: Map<string, Species[]>;
 }
 
-export function loadCatalog(file: string): CatalogIndex {
-  const json = fs.readFileSync(file, 'utf8');
+export function indexCatalog(json: string): CatalogIndex {
   const raw = JSON.parse(json) as Catalog;
   const species = new Map(raw.species.map((s) => [s.id, s]));
   const sets = new Map(raw.sets.map((s) => [s.id, s]));

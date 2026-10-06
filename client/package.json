@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:demo": "tsx ../scripts/build-demo-data.ts && vite build --config vite.demo.config.ts && node ../scripts/wrap-artifact.mjs"
   },
   "dependencies": {
     "@fontsource/pixelify-sans": "^5.3.0",
@@ -24,7 +25,10 @@
   "devDependencies": {
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@types/sql.js": "^1.4.11",
     "@vitejs/plugin-react": "^6.1.2",
-    "vite": "^8.3.3"
+    "sql.js": "^1.14.2",
+    "vite": "^8.3.3",
+    "vite-plugin-singlefile": "^2.3.3"
   }
 }

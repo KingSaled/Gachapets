@@ -30,8 +30,4 @@ function migrate(db: DB) {
   }
 }
 
-/** Current time in ms. Wrapped so tests can control it. */
-export let now = () => Date.now();
-export function setClock(fn: () => number) {
-  now = fn;
-}
+export { now, setClock } from '../clock.ts';

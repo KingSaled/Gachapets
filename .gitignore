@@ -13,3 +13,5 @@ server/var/
 test-results/
 playwright-report/
 .cache/
+client/src/demo/generated/
+client/dist-demo/

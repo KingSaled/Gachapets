@@ -4,7 +4,7 @@ import type { Finish, MeDTO, PublicUser } from '@gachapets/shared';
 import {
   COSMETICS, DAILY_COOLDOWN_MS, DAILY_STREAK_WINDOW_MS, DEFAULT_BANNER, DEFAULT_THEME, STARTING_COINS, dailyAmount,
 } from '@gachapets/shared';
-import { now } from '../db/index.ts';
+import { now } from '../clock.ts';
 import { type Ctx, GameError, tx } from '../context.ts';
 import { adjustCoins } from './wallet.ts';
 import { earnedBadges } from './badges.ts';

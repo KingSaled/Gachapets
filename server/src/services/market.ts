@@ -3,7 +3,7 @@ import {
   ELEMENTS, FINISHES, FINISH_INFO, MAX_ACTIVE_LISTINGS, MAX_LISTING_PRICE, MIN_LISTING_PRICE, NEW_ACCOUNT_DAYS,
   NEW_ACCOUNT_FLOOR, NEW_ACCOUNT_MAX_MULT, NEW_ACCOUNT_PACKS, RARITIES, marketFee, quickSellValue, referenceValue,
 } from '@gachapets/shared';
-import { now } from '../db/index.ts';
+import { now } from '../clock.ts';
 import { type Ctx, GameError, afterCommit, tx } from '../context.ts';
 import { adjustCoins } from './wallet.ts';
 import { getCard, toCardDTO } from './cards.ts';

@@ -10,7 +10,7 @@ import {
   FINISHES, FINISH_INFO, PACK_PRICE, PACK_SLOTS, STAR_WEIGHT,
   type SlotKind, pullScore, quickSellValue, slotOdds,
 } from '@gachapets/shared';
-import { now } from '../db/index.ts';
+import { now } from '../clock.ts';
 import { type Ctx, GameError, afterCommit, tx } from '../context.ts';
 import { adjustCoins } from './wallet.ts';
 import { bumpPacksOpened, hasRunLeft, recomputeValue, reserveMint } from './prints.ts';

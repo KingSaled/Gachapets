@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import type { CardDTO, CosmeticDef } from '@gachapets/shared';
 import { COSMETICS, FINISH_INFO, allBadges, cosmeticById } from '@gachapets/shared';
-import { api } from '../lib/api.ts';
+import { api, DEMO } from '../lib/api.ts';
 import { keys, queryClient, setCoins, setMe, useCatalog, useCollection, useMe } from '../lib/queries.ts';
 import { resetSocket } from '../lib/socket.ts';
 import { toast, toastError } from '../lib/store.ts';
@@ -69,6 +69,7 @@ export function ProfilePage() {
             <div className="profile-actions">
               <Button variant="gold" size="sm" icon="edit" onClick={() => setEditing(true)}>Customize</Button>
               <Button variant="ghost" size="sm" icon="logout" onClick={logout}>Log out</Button>
+              {DEMO && <ResetWorld />}
             </div>
           )}
         </div>
@@ -357,5 +358,23 @@ function ShowcasePicker({ slot, current, onClose }: { slot: number | null; curre
         </div>
       )}
     </Sheet>
+  );
+}
+
+/** Demo only: wipe this browser's world and start fresh (two-step, no dialogs). */
+function ResetWorld() {
+  const [armed, setArmed] = useState(false);
+  return (
+    <Button
+      variant={armed ? 'danger' : 'ink'}
+      size="sm"
+      onClick={async () => {
+        if (!armed) return setArmed(true);
+        const local = await import('../demo/localServer.ts');
+        await local.resetWorld();
+      }}
+    >
+      {armed ? 'Tap again to wipe world' : 'Reset demo world'}
+    </Button>
   );
 }

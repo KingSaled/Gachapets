@@ -1,6 +1,6 @@
 import type { CardDTO, Finish, LeaderboardRow, ProfileDTO } from '@gachapets/shared';
 import { COSMETICS, DEFAULT_TITLES, FINISHES, SHOWCASE_SLOTS, cosmeticById } from '@gachapets/shared';
-import { now } from '../db/index.ts';
+import { now } from '../clock.ts';
 import { type Ctx, GameError, tx } from '../context.ts';
 import { adjustCoins } from './wallet.ts';
 import { badgeDefs, earnedBadges } from './badges.ts';

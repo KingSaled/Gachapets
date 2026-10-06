@@ -6,7 +6,7 @@ import type { CardDTO, Element, Finish, Species } from '@gachapets/shared';
 import { ELEMENTS, FINISHES, FINISH_INFO, RARITY_INFO, quickSellValue, setBadges, spriteUrl } from '@gachapets/shared';
 import { api } from '../lib/api.ts';
 import { invalidateAfterTrade, setCoins, useCatalog, useCollection, useMe, useSets } from '../lib/queries.ts';
-import { toast, toastError } from '../lib/store.ts';
+import { toast, toastError, useMarketFocus } from '../lib/store.ts';
 import { sfx } from '../lib/sfx.ts';
 import { fx } from '../lib/fx.ts';
 import { coins } from '../lib/format.ts';
@@ -262,6 +262,7 @@ function Pocket({ sp, copies, onOpen }: { sp: Species; copies?: CardDTO[]; onOpe
 
 function SpeciesSheet({ species, copies, onClose }: { species: Species | null; copies: CardDTO[]; onClose: () => void }) {
   const [, navigate] = useLocation();
+  const setFocus = useMarketFocus((s) => s.setSpeciesId);
   const [detail, setDetail] = useState<CardDTO | null>(null);
   const sorted = [...copies].sort((a, b) => FINISH_INFO[b.finish].rank - FINISH_INFO[a.finish].rank || a.mint - b.mint);
 
@@ -285,7 +286,7 @@ function SpeciesSheet({ species, copies, onClose }: { species: Species | null; c
                 <h2>{RARITY_INFO[species.rarity].glyph} No. {String(species.no).padStart(3, '0')} — ???</h2>
                 <p className="muted">Pull it from a pack, or check whether another collector is selling one.</p>
                 <div className="detail-row">
-                  <Button variant="mint" icon="market" onClick={() => { onClose(); navigate(`/market?speciesId=${species.id}`); }}>Find on market</Button>
+                  <Button variant="mint" icon="market" onClick={() => { onClose(); setFocus(species.id); navigate('/market'); }}>Find on market</Button>
                 </div>
               </div>
             </div>

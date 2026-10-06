@@ -17,8 +17,16 @@ export type SpriteView = keyof typeof SPRITE_FILES;
 
 export const SPRITE_ALLOWLIST = new Set<string>(Object.values(SPRITE_FILES));
 
+let resolver: ((path: string) => string) | null = null;
+
+/** Lets a host (e.g. the self-contained demo build) serve sprites from somewhere other than /sprites. */
+export function setSpriteResolver(fn: ((path: string) => string) | null) {
+  resolver = fn;
+}
+
 export function spriteUrl(species: { family: string; dir: string }, view: SpriteView): string {
-  return `/sprites/${species.family}/${species.dir}/${SPRITE_FILES[view]}`;
+  const path = `/sprites/${species.family}/${species.dir}/${SPRITE_FILES[view]}`;
+  return resolver ? resolver(path) : path;
 }
 
 /** The sprite that is the card's main art for a given finish. */

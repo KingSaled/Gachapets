@@ -3,7 +3,7 @@ import { useLocation } from 'wouter';
 import { motion } from 'motion/react';
 import clsx from 'clsx';
 import type { CardDTO, PackResult } from '@gachapets/shared';
-import { FINISH_INFO, PACK_PRICE, allBadges } from '@gachapets/shared';
+import { FINISH_INFO, PACK_PRICE, allBadges, spriteUrl } from '@gachapets/shared';
 import { api } from '../lib/api.ts';
 import { invalidateAfterTrade, keys, queryClient, setCoins, useCatalog, useCollection, useMe } from '../lib/queries.ts';
 import { toast, toastError, useOpening } from '../lib/store.ts';
@@ -154,7 +154,7 @@ export function PackSummary({ result }: { result: PackResult }) {
             return (
               <div key={f} className="reward reward--line">
                 <span className="line-sprites">
-                  {line.map((s) => <img key={s.id} className="px" src={`/sprites/${s.family}/${s.dir}/icon_nobg.png`} alt="" width={32} height={32} />)}
+                  {line.map((s) => <img key={s.id} className="px" src={spriteUrl(s, 'icon')} alt="" width={32} height={32} />)}
                 </span>
                 <div>
                   <b>Line complete</b>

@@ -9,7 +9,19 @@ export class ApiError extends Error {
   }
 }
 
+/** True in the self-contained demo build, where the game server runs inside the page. */
+export const DEMO = import.meta.env.VITE_DEMO === '1';
+
 async function request<T>(method: string, url: string, body?: unknown): Promise<T> {
+  if (DEMO) {
+    const local = await import('../demo/localServer.ts');
+    try {
+      return (await local.handle(method, url, body)) as T;
+    } catch (err) {
+      if (err instanceof local.LocalApiError) throw new ApiError(err.status, err.code, err.message);
+      throw err;
+    }
+  }
   const res = await fetch(url, {
     method,
     credentials: 'same-origin',

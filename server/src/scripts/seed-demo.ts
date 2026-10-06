@@ -7,7 +7,7 @@
  */
 import { loadConfig } from '../config.ts';
 import { openDb } from '../db/index.ts';
-import { loadCatalog } from '../catalog.ts';
+import { loadCatalog } from '../catalog-load.ts';
 import { Bus, type Ctx, cryptoRng } from '../context.ts';
 import { botTick, ensureBots } from '../services/bots.ts';
 import { recomputeAll } from '../services/prints.ts';

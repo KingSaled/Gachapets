@@ -115,3 +115,13 @@ export const useAudio = create<AudioState>((set, get) => {
     },
   };
 });
+
+// ── "Find on market" hand-off (binder → market) ─────────────────────────
+interface MarketFocus {
+  speciesId: string | null;
+  setSpeciesId: (id: string | null) => void;
+}
+export const useMarketFocus = create<MarketFocus>((set) => ({
+  speciesId: null,
+  setSpeciesId: (speciesId) => set({ speciesId }),
+}));

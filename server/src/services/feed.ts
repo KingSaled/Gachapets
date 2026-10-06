@@ -1,5 +1,5 @@
 import type { FeedEvent, FeedEventType } from '@gachapets/shared';
-import { now } from '../db/index.ts';
+import { now } from '../clock.ts';
 import { type Ctx, afterCommit } from '../context.ts';
 
 type Payload = Omit<FeedEvent, 'id' | 'type' | 'at' | 'username'>;

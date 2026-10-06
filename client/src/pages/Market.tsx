@@ -1,12 +1,12 @@
 import { useEffect, useState, type MouseEvent } from 'react';
-import { Link, useLocation, useSearch } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import type { Finish, ListingDTO } from '@gachapets/shared';
-import { ELEMENTS, FINISHES, FINISH_INFO, RARITIES, RARITY_INFO } from '@gachapets/shared';
+import { ELEMENTS, FINISHES, FINISH_INFO, RARITIES, RARITY_INFO, artViewForFinish, spriteUrl } from '@gachapets/shared';
 import { api, type BrowseParams } from '../lib/api.ts';
 import { invalidateAfterTrade, keys, setCoins, useCatalog, useMe } from '../lib/queries.ts';
-import { toast, toastError } from '../lib/store.ts';
+import { toast, toastError, useMarketFocus } from '../lib/store.ts';
 import { sfx } from '../lib/sfx.ts';
 import { fx } from '../lib/fx.ts';
 import { ago, coins, pct, serial } from '../lib/format.ts';
@@ -47,11 +47,11 @@ export function MarketPage() {
 // ── Browse ──────────────────────────────────────────────────────────────
 function Browse({ grails }: { grails: ListingDTO[] }) {
   const catalog = useCatalog();
-  const search = useSearch();
-  const initial = new URLSearchParams(search);
+  const focus = useMarketFocus((s) => s.speciesId);
+  const setFocus = useMarketFocus((s) => s.setSpeciesId);
   const [q, setQ] = useState('');
   const [debounced, setDebounced] = useState('');
-  const [filters, setFilters] = useState<BrowseParams>({ sort: 'newest', speciesId: initial.get('speciesId') ?? undefined });
+  const [filters, setFilters] = useState<BrowseParams>({ sort: 'newest', speciesId: focus ?? undefined });
   const [page, setPage] = useState(1);
   const [buying, setBuying] = useState<ListingDTO | null>(null);
 
@@ -60,6 +60,10 @@ function Browse({ grails }: { grails: ListingDTO[] }) {
     return () => window.clearTimeout(id);
   }, [q]);
   useEffect(() => setPage(1), [debounced, filters]);
+  useEffect(() => {
+    if (focus) setFocus(null); // consumed: don't re-apply next visit
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const params = { ...filters, q: debounced || undefined, page, pageSize: 24 };
   const { data, isLoading, isFetching } = useQuery({ queryKey: keys.listings(params), queryFn: () => api.listings(params), placeholderData: keepPreviousData });
@@ -110,7 +114,7 @@ function Browse({ grails }: { grails: ListingDTO[] }) {
       {focused && (
         <div className="focus-chip">
           Showing listings for <b>{focused.name}</b>
-          <button type="button" className="ui-label" onClick={() => setF({ speciesId: undefined })}>clear ✕</button>
+          <button type="button" className="ui-label" onClick={() => { setFocus(null); setF({ speciesId: undefined }); }}>clear ✕</button>
         </div>
       )}
 
@@ -239,7 +243,7 @@ function Movers() {
     const sp = catalog.species.get(speciesId)!;
     return (
       <button type="button" className="mover" onClick={() => { sfx.click(); navigate(`/market/${speciesId}/${finish}`); }}>
-        <img className="px mover-icon" src={`/sprites/${sp.family}/${sp.dir}/${finish === 'misprint' ? 'back_nobg.png' : finish === 'shiny' ? 'front_shiny_nobg.png' : 'front_nobg.png'}`} alt="" width={48} height={48} />
+        <img className="px mover-icon" src={spriteUrl(sp, artViewForFinish(finish))} alt="" width={48} height={48} />
         <span className="mover-name">{finish === 'misprint' ? sp.misprintName : sp.name}</span>
         <FinishTag finish={finish} />
         <Price value={value} size={16} />

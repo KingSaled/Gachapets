@@ -15,7 +15,8 @@ import type { Finish, PricePoint, Rarity, Species } from '@gachapets/shared';
 import {
   FINISH_INFO, PACK_SLOTS, STAR_WEIGHT, quickSellValue, referenceValue, slotOdds,
 } from '@gachapets/shared';
-import { now, type DB } from '../db/index.ts';
+import type { DB } from '../db/index.ts';
+import { now } from '../clock.ts';
 import type { Ctx } from '../context.ts';
 
 export interface PrintRow {

@@ -1,6 +1,6 @@
 import type { BadgeDef, Finish, Species } from '@gachapets/shared';
 import { ELEMENTS, TYPE_BADGE_THRESHOLD, allBadges } from '@gachapets/shared';
-import { now } from '../db/index.ts';
+import { now } from '../clock.ts';
 import type { Ctx } from '../context.ts';
 import { adjustCoins } from './wallet.ts';
 import { ownedSpeciesIds } from './cards.ts';

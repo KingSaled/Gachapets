@@ -1,4 +1,4 @@
-import { now } from '../db/index.ts';
+import { now } from '../clock.ts';
 import { type Ctx, GameError, afterCommit } from '../context.ts';
 
 /**

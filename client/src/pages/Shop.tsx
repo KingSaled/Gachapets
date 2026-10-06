@@ -1,5 +1,5 @@
 import { useState, type CSSProperties } from 'react';
-import { useLocation } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { motion } from 'motion/react';
 import type { CardSet, Finish } from '@gachapets/shared';
 import { FINISHES, FINISH_INFO, PACK_PRICE, PACK_SLOTS, STAR_WEIGHT, slotOdds } from '@gachapets/shared';
@@ -51,7 +51,7 @@ function OddsSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
           </tr>
         </tbody>
       </table>
-      <p className="muted small"><a href="/finishes">See every finish side by side →</a></p>
+      <p className="muted small"><Link href="/finishes">See every finish side by side →</Link></p>
       <p className="muted small">Serialized finishes are capped forever. When a species' run sells out, that roll lands on another species that still has run left — and when a whole set runs dry, it steps down a tier. Scarcity is real, not cosmetic.</p>
     </Sheet>
   );

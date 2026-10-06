@@ -2,7 +2,7 @@ import { useMemo, useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import type { Finish } from '@gachapets/shared';
 import { seededRng } from '@gachapets/shared';
-import { api } from '../lib/api.ts';
+import { api, DEMO } from '../lib/api.ts';
 import { keys, queryClient, useCatalog } from '../lib/queries.ts';
 import { resetSocket } from '../lib/socket.ts';
 import { sfx } from '../lib/sfx.ts';
@@ -109,6 +109,7 @@ export function AuthScreen() {
                   required
                 />
               </label>
+              {!DEMO && (
               <label className="field">
                 <span className="ui-label">Password</span>
                 <input
@@ -121,10 +122,16 @@ export function AuthScreen() {
                   required
                 />
               </label>
+              )}
               <Button type="submit" variant={mode === 'register' ? 'primary' : 'mint'} size="lg" disabled={busy} silent>
                 {mode === 'register' ? 'Claim 1,000 coins & start' : 'Insert coin'}
               </Button>
               {mode === 'register' && <p className="auth-note">New collectors start with 1,000 coins — enough for 10 packs. No real money, ever.</p>}
+              {DEMO && (
+                <p className="auth-note demo-note">
+                  Demo build: the whole game runs in this browser tab, with ten NPC collectors trading alongside you. Your world saves in this browser, so no password is needed.
+                </p>
+              )}
             </div>
           </motion.form>
         )}

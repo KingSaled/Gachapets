@@ -1,5 +1,5 @@
 import { LINE_COMPLETE_REWARD } from '@gachapets/shared';
-import { now } from '../db/index.ts';
+import { now } from '../clock.ts';
 import type { Ctx } from '../context.ts';
 import { adjustCoins } from './wallet.ts';
 
