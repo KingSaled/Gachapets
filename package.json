@@ -1,0 +1,30 @@
+{
+  "name": "gachapets",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Gachapets — a multiplayer pixel-pet trading card game and market simulator.",
+  "type": "module",
+  "workspaces": [
+    "shared",
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n server,client -c magenta,cyan \"npm:dev -w server\" \"npm:dev -w client\"",
+    "build": "npm run build -w client",
+    "start": "npm run start -w server",
+    "catalog": "tsx scripts/build-catalog.ts",
+    "odds": "tsx scripts/odds-report.ts",
+    "test": "npm run test -w server",
+    "typecheck": "tsc -p shared --noEmit && tsc -p server --noEmit && tsc -p client --noEmit",
+    "seed:demo": "npm run seed:demo -w server"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

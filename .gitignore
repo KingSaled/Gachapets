@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+.env
+.env.*
+# runtime data
+server/var/
+*.db
+*.db-wal
+*.db-shm
+# test artifacts
+test-results/
+playwright-report/
+.cache/
