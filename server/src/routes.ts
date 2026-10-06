@@ -5,7 +5,7 @@ import { type Ctx, GameError } from './context.ts';
 import {
   claimDaily, destroySession, getUser, login, meDTO, register, saveSettings, type UserRow, userForSession,
 } from './services/users.ts';
-import { openPack, } from './services/packs.ts';
+import { openPack } from './services/packs.ts';
 import { collectionOf, getCard, quickSell, toCardDTO } from './services/cards.ts';
 import {
   browseListings, buyListing, cancelListing, createListing, marketOverview, myListings, printStats, speciesPrints,
@@ -46,7 +46,9 @@ export function registerRoutes(app: FastifyInstance, ctx: Ctx) {
   // ── Auth ────────────────────────────────────────────────────────────────
   const credentials = z.object({ username: z.string().trim().min(1).max(32), password: z.string().min(1).max(200) });
 
-  app.post('/api/auth/register', authLimit, async (req, reply) => {
+  // Registration is limited per IP per hour in production to slow alt-account farming.
+  const registerLimit = { config: { rateLimit: { max: ctx.config.isProd ? 5 : 500, timeWindow: '1 hour' } } };
+  app.post('/api/auth/register', registerLimit, async (req, reply) => {
     const body = credentials.parse(req.body);
     const { userId, token } = await register(ctx, body.username, body.password);
     setSession(reply, token);

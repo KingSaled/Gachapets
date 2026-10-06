@@ -23,5 +23,7 @@ const shutdown = async () => {
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
 
+if (ctx.config.devLuck) app.log.warn(`DEV_LUCK=${ctx.config.devLuck}: pack odds are rigged for previewing reveals`);
+
 await app.listen({ port: ctx.config.port, host: ctx.config.host });
 app.log.info(`Gachapets server on :${ctx.config.port} — live sets: ${ctx.config.liveSets.join(', ')}`);

@@ -33,12 +33,11 @@ const BANNER: Record<number, string> = { 2: 'HOLOFOIL', 3: 'PARALLAX', 4: '3D PO
 
 function bannerFor(card: PulledCard, sp: Species, level: number): { title: string; sub?: string; finish: Finish } | null {
   if (level < 2) return null;
-  const sub = [
-    sp.rarity === 'star' ? '✦ STAR RARE' : null,
-    card.printRun ? `№ ${serial(card.finish, card.mint)}` : null,
-  ].filter(Boolean).join('  ·  ');
+  // The serial number gets its own stamp, so the banner names the creature.
+  const name = (card.finish === 'misprint' ? sp.misprintName : sp.name).toUpperCase();
+  const sub = sp.rarity === 'star' ? `✦ STAR RARE · ${name}` : name;
   if (card.finish === 'base' || card.finish === 'shiny') return { title: card.finish === 'shiny' ? 'SHINY STAR' : 'STAR RARE', sub: sp.name.toUpperCase(), finish: card.finish === 'shiny' ? 'shiny' : 'pop3d' };
-  return { title: BANNER[FINISH_INFO[card.finish].rank] ?? 'HIT', sub: sub || sp.name.toUpperCase(), finish: card.finish };
+  return { title: BANNER[FINISH_INFO[card.finish].rank] ?? 'HIT', sub, finish: card.finish };
 }
 
 function useStageSize() {

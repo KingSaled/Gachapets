@@ -1,12 +1,12 @@
 import type { CardDTO, Finish, ListingDTO, PrintStats, PublicUser, SaleDTO } from '@gachapets/shared';
 import {
-  ELEMENTS, FINISHES, FINISH_INFO, MAX_ACTIVE_LISTINGS, MAX_LISTING_PRICE, MIN_LISTING_PRICE, RARITIES,
-  marketFee, quickSellValue, referenceValue,
+  ELEMENTS, FINISHES, FINISH_INFO, MAX_ACTIVE_LISTINGS, MAX_LISTING_PRICE, MIN_LISTING_PRICE, NEW_ACCOUNT_DAYS,
+  NEW_ACCOUNT_FLOOR, NEW_ACCOUNT_MAX_MULT, NEW_ACCOUNT_PACKS, RARITIES, marketFee, quickSellValue, referenceValue,
 } from '@gachapets/shared';
 import { now } from '../db/index.ts';
 import { type Ctx, GameError, afterCommit, tx } from '../context.ts';
 import { adjustCoins } from './wallet.ts';
-import { type CardRow, getCard, toCardDTO } from './cards.ts';
+import { getCard, toCardDTO } from './cards.ts';
 import {
   getPrint, marketValueOf, pctChange, priceHistory, recomputeValue, recordSaleForPrint, valueAt,
 } from './prints.ts';
@@ -59,6 +59,12 @@ export function buyListing(ctx: Ctx, buyerId: number, listingId: number) {
     if (l.seller_id === buyerId) throw new GameError(400, 'own_listing', "You can't buy your own listing.");
     const card = getCard(ctx, l.card_id)!;
     const t = now();
+    const buyer = ctx.db.prepare('SELECT created_at, packs_opened, is_bot FROM users WHERE id = ?').get(buyerId) as { created_at: number; packs_opened: number; is_bot: number };
+    const isNew = !buyer.is_bot && (t - buyer.created_at < NEW_ACCOUNT_DAYS * DAY || buyer.packs_opened < NEW_ACCOUNT_PACKS);
+    const cap = Math.max(NEW_ACCOUNT_FLOOR, marketValueOf(ctx, l.species_id, l.finish) * NEW_ACCOUNT_MAX_MULT);
+    if (isNew && l.price > cap) {
+      throw new GameError(403, 'new_account_limit', `New collectors can't pay more than ${Math.floor(cap).toLocaleString()} coins for this card (${NEW_ACCOUNT_MAX_MULT}× its market value) until they've opened ${NEW_ACCOUNT_PACKS} packs and played ${NEW_ACCOUNT_DAYS} days.`);
+    }
     const fee = marketFee(l.price);
 
     const coins = adjustCoins(ctx, buyerId, -l.price, 'market_buy', listingId);
@@ -318,4 +324,3 @@ export function myListings(ctx: Ctx, userId: number) {
   return rows.map((r) => mapListing(ctx, r, new Map()));
 }
 
-export type { CardRow };

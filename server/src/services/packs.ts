@@ -64,9 +64,11 @@ function poolFor(ctx: Ctx, setId: string, kind: SlotKind): Species[] {
 export function rollPack(ctx: Ctx, setId: string, rng: () => number = ctx.rng): Roll[] {
   const used = new Set<string>();
   const out: Roll[] = [];
+  const luck = ctx.config.devLuck;
+  const finishRng = luck ? () => 1 - rng() * (1 - luck) : rng;
   for (const kind of PACK_SLOTS) {
     const pool = poolFor(ctx, setId, kind).filter((s) => !used.has(s.id));
-    let finish = rollFinish(rng, kind);
+    let finish = rollFinish(finishRng, kind);
     let species = pickWeighted(rng, pool)!;
     while (!hasRunLeft(ctx, species.id, finish)) {
       const alt = pickWeighted(rng, pool.filter((s) => hasRunLeft(ctx, s.id, finish)));

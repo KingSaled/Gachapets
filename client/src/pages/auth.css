@@ -30,6 +30,7 @@
   display: grid;
   gap: 22px;
   justify-items: start;
+  min-width: 0;
 }
 
 .title {
@@ -59,7 +60,7 @@
 .tagline {
   font-size: 20px;
   color: var(--paper-dim);
-  max-width: 480px;
+  max-width: min(480px, 100%);
 }
 
 .press-start {
@@ -116,5 +117,9 @@
   .auth-main {
     justify-items: center;
     text-align: center;
+    width: 100%;
+  }
+  .tagline {
+    font-size: 17px;
   }
 }

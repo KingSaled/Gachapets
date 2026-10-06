@@ -21,6 +21,11 @@ export interface Config {
   /** Run the ambient NPC collectors that keep the market moving. */
   simulateBots: boolean;
   botTickMs: number;
+  /**
+   * Dev only: finish rolls land in the top (1 - devLuck) of the odds table,
+   * e.g. DEV_LUCK=0.99 so designers can preview big reveals. Ignored in production.
+   */
+  devLuck: number | null;
 }
 
 export function loadConfig(overrides: Partial<Config> = {}): Config {
@@ -35,6 +40,7 @@ export function loadConfig(overrides: Partial<Config> = {}): Config {
     liveSets: (env.LIVE_SETS ?? 'gen,neo').split(',').map((s) => s.trim()).filter(Boolean),
     simulateBots: (env.SIMULATE_BOTS ?? (isProd ? '0' : '1')) === '1',
     botTickMs: Number(env.BOT_TICK_MS ?? 25_000),
+    devLuck: !isProd && env.DEV_LUCK ? Math.min(0.99999, Math.max(0, Number(env.DEV_LUCK))) : null,
     ...overrides,
   };
 }

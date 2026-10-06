@@ -24,3 +24,8 @@ export function makeUser(ctx: Ctx, coins = 100_000): number {
   n += 1;
   return createUserRow(ctx, `tester${n}`, 'scrypt$x$y', { coins });
 }
+
+/** Make an account old and experienced enough to skip the new-account trade guard. */
+export function season(ctx: Ctx, userId: number) {
+  ctx.db.prepare('UPDATE users SET created_at = 0, packs_opened = 100 WHERE id = ?').run(userId);
+}

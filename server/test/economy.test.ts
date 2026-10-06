@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   FINISH_INFO, PACK_PRICE, PACK_SLOTS, STARTING_COINS, marketFee, pullScore, quickSellValue, slotOdds,
 } from '@gachapets/shared';
-import { makeCtx, makeUser } from './helpers.ts';
+import { makeCtx, makeUser, season } from './helpers.ts';
 import { openPack, rollPack, trickOrder } from '../src/services/packs.ts';
 import { quickSell } from '../src/services/cards.ts';
 import { buyListing, cancelListing, createListing } from '../src/services/market.ts';
@@ -131,6 +131,7 @@ describe('market', () => {
     const ctx = makeCtx();
     const seller = makeUser(ctx, 1000);
     const buyer = makeUser(ctx, 1000);
+    season(ctx, buyer);
     const { cards } = openPack(ctx, seller, 'gen');
     const card = cards[0];
     const sellerBefore = coinsOf(ctx, seller);
@@ -158,12 +159,27 @@ describe('market', () => {
     const ctx = makeCtx();
     const seller = makeUser(ctx, 1000);
     const poor = makeUser(ctx, 0);
+    season(ctx, poor);
     const { cards } = openPack(ctx, seller, 'gen');
     const listing = createListing(ctx, seller, cards[0].id, 500);
     expect(() => buyListing(ctx, poor, listing.id)).toThrow(/coins/i);
     const l = ctx.db.prepare('SELECT status FROM listings WHERE id = ?').get(listing.id) as { status: string };
     expect(l.status).toBe('active');
     expect((ctx.db.prepare('SELECT COUNT(*) n FROM sales').get() as { n: number }).n).toBe(0);
+  });
+});
+
+describe('new-account guard', () => {
+  it('blocks fresh accounts from overpaying wildly, but not fair buys', () => {
+    const ctx = makeCtx();
+    const seller = makeUser(ctx, 1000);
+    const fresh = makeUser(ctx, 10_000);
+    const { cards } = openPack(ctx, seller, 'gen');
+    const plain = cards.filter((c) => c.finish === 'base');
+    const junk = createListing(ctx, seller, plain[0].id, 5000);
+    expect(() => buyListing(ctx, fresh, junk.id)).toThrow(/New collectors/);
+    const fair = createListing(ctx, seller, plain[1].id, 20);
+    expect(() => buyListing(ctx, fresh, fair.id)).not.toThrow();
   });
 });
 

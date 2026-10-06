@@ -30,6 +30,17 @@ export const LINE_COMPLETE_REWARD = 25;
 
 export const SHOWCASE_SLOTS = 5;
 
+/**
+ * New-account trade guard: until an account is NEW_ACCOUNT_DAYS old AND has
+ * opened NEW_ACCOUNT_PACKS packs, it can't buy a listing priced above
+ * NEW_ACCOUNT_MAX_MULT × market value (or the flat floor). Stops alt accounts
+ * funnelling starter coins into a main account through junk listings.
+ */
+export const NEW_ACCOUNT_DAYS = 3;
+export const NEW_ACCOUNT_PACKS = 10;
+export const NEW_ACCOUNT_MAX_MULT = 3;
+export const NEW_ACCOUNT_FLOOR = 60;
+
 export interface FinishInfo {
   id: Finish;
   rank: number;
